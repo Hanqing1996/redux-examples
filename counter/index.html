@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.bootcss.com/redux/4.0.4/redux.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+</body>
+<script>
+    function counter(state, action) {
+        if (typeof state === 'undefined') {
+            return 0
+        }
+
+        switch (action.type) {
+            case 'INCREMENT':
+                return state + action.payload
+            case 'DECREMENT':
+                return state - action.payload
+            default:
+                return state
+        }
+    }
+
+    function add() {
+        store.dispatch({ type: 'INCREMENT', payload: 1 })
+    }
+
+    function reduce() {
+        store.dispatch({ type: 'DECREMENT', payload: 1 })
+    }
+
+    function addIfOdd() {
+        if (store.getState() % 2 == 1)
+            store.dispatch({ type: 'INCREMENT', payload: 1 })
+    }
+
+    function addAsync() {
+        setTimeout(() => {
+            store.dispatch({ type: 'INCREMENT', payload: 1 })
+        }, 3000)
+    }
+
+    let store = Redux.createStore(counter)
+
+    function render() {
+        let root = document.getElementById('root')
+        root.innerHTML = `
+        Clicked: <span id="value">${store.getState()}</span> times
+        <button id="increment" onclick="add()">+</button>
+        <button id="decrement" onclick="reduce()">-</button>
+        <button id="incrementIfOdd" onclick="addIfOdd()">Increment if odd</button>
+        <button id="incrementAsync" onclick="addAsync()">Increment async</button>
+        `
+    }
+
+    render()
+    store.subscribe(render)
+
+</script>
+
+</html>
